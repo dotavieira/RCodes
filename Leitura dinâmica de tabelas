@@ -22,11 +22,11 @@ con <- dbConnect(drv, username = "", password = "",
 options(scipen = 999)
 
  
- lista = con %>% dbGetQuery( paste0("select table_name from all_tables where owner='INFO'"))
+ lista = con %>% dbGetQuery( paste0("select table_name from all_tables where owner=''"))
  
  #USAR O COMANDO "ASSIGN" PARA TENTAR CARREGAR AS TABELAS ATRAVES DE VETORES
  for (i in lista){
    aux = con %>% dbGetQuery( paste0("select *
-                                   from INFO.",i,""))
+                                   from ",i,""))
    assign(i,aux)
  }
