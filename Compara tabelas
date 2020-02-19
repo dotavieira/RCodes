@@ -1,0 +1,64 @@
+library(feather)
+library(lubridate)
+library(tidyverse)
+
+
+
+segunda_2019 = read.csv2("arquivo", sep = ";") #o que tem menos ****
+DEZEMBRO_2019_MENOR = segunda_2019[substr(segunda_2019$coluna, start = 4, stop = 10) == "12/3456", ]
+
+sexta_2019 = read.csv2("arquivo", sep = ";") #o que tem mais
+DEZEMBRO_2019_MAIOR = sexta_2019[substr(sexta_2019$coluna, start = 4, stop = 10) == "12/3456", ]
+
+#diferenca_dez = setdiff(DEZEMBRO_2019_MAIOR, DEZEMBRO_2019_MENOR)
+
+
+segunda_2019 = read.csv2("arquivo", sep = ";") #o que tem menos ****
+NOVEMBRO_2019_MENOR = segunda_2019[substr(segunda_2019$coluna, start = 4, stop = 10) == "12/3456", ]
+
+sexta_2019 = read.csv2("Parcial 2019.csv", sep = ";") #o que tem mais
+NOVEMBRO_2019_MAIOR = sexta_2019[substr(sexta_2019$coluna, start = 4, stop = 10) == "12/3456", ]
+
+#diferenca_nov = setdiff(NOVEMBRO_2019_MAIOR, NOVEMBRO_2019_MENOR) #COMPARAÇÃO
+
+
+
+#tudo o que tem em "dezembro maior" e não tem em "dezembro menor", ou seja, a diferença
+library(sqldf)
+diferenca_dez = sqldf('SELECT * FROM -- EXCEPT SELECT * FROM --')
+
+library(sqldf)
+diferenca_nov = sqldf('SELECT * FROM -- EXCEPT SELECT * FROM --')
+
+
+
+library(tidyverse)
+
+DF = read.csv2("arquivo", sep = ";") #o que tem menos
+mês = list(-- = "12/3456")
+DF_MÊS = DF[substr(DF$coluna, start = 4, stop = 10) == mês[["--"]], ]
+
+
+#procura linhas repetidas em um dataframe e retorna seus índices
+linhas_duplicadas = duplicated(DF_MÊS)
+indices = which(linhas_duplicadas %in% c(TRUE))
+resultado = c()
+output = matrix(ncol = 17, byrow = TRUE | T | F | FALSE)
+output = na.omit(as.data.frame(output))
+names(output) = names(DF_MÊS)
+
+
+for(i in indices){
+  resultado = c(resultado, i)
+}
+
+for(i in resultado){
+  output = rbind(output, DF_MÊS[i, ])
+}
+
+if(nrow(output) > 0){write.csv2(output, paste0(names(mês[1])), ".csv")}
+
+
+
+
+
