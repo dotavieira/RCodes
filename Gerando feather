@@ -1,0 +1,55 @@
+
+#Bibliotecas necessárias
+library(DT)
+library(dplyr)
+library(feather)
+library(ROracle)
+library(tidyverse)
+library(gridExtra)
+library(rstudioapi)
+
+
+#SRPTV
+drv <- dbDriver("Oracle")
+## Use username/password authentication.
+
+
+# paramentros do servidor e schema
+host <- ""
+port <- 
+sid <- ""
+
+connect.string <- paste(
+  "(DESCRIPTION=",
+  "(ADDRESS=(PROTOCOL=tcp)(HOST=", host, ")(PORT=", port, "))",
+  "(CONNECT_DATA=(SID=", sid, ")))", sep = "")
+
+# conexão com a base
+con <- dbConnect(drv, username = "", password = "",
+                 dbname = connect.string, encoding = "latin1")
+
+options(scipen = 999)
+
+# lista tabelas existentes
+tabelas = con %>% dbGetQuery( paste0("select table_name from all_tables where owner=''"))
+tabelas = as.vector(tabelas$TABLE_NAME)
+# tabelas = dbListTables(con)
+
+mydate = gsub(" ", "_", format(Sys.time(), "%Y %b %d %a %X"), fixed=T)
+mydate = gsub(":", "_", mydate, fixed=T)
+
+for(i in 1:length(tabelas))
+{
+  
+  cat(tabelas[i], "\n")
+  
+    df =  con %>% dbGetQuery( paste0("select * from ", tabelas[i]) )  
+    
+    write_feather(df, paste0("-lugar-\",tabelas[i],"_", mydate, ".feather"))
+    
+    cat(paste("copiado", tabelas[i]), "\n")
+  
+}
+
+
+
