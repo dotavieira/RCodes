@@ -1,0 +1,31 @@
+ 
+
+drv <- dbDriver("Oracle")
+## Use username/password authentication.
+
+
+# paramentros do servidor e schema
+host <- ""
+port <- 
+sid <- ""
+
+connect.string <- paste(
+  "(DESCRIPTION=",
+  "(ADDRESS=(PROTOCOL=tcp)(HOST=", host, ")(PORT=", port, "))",
+  "(CONNECT_DATA=(SID=", sid, ")))", sep = "")
+
+# conexão com a base
+con <- dbConnect(drv, username = "", password = "",
+                 dbname = connect.string, encoding = "latin1")
+
+options(scipen = 999)
+
+ 
+ lista = con %>% dbGetQuery( paste0("select table_name from all_tables where owner='INFO'"))
+ 
+ #USAR O COMANDO "ASSIGN" PARA TENTAR CARREGAR AS TABELAS ATRAVES DE VETORES
+ for (i in lista){
+   aux = con %>% dbGetQuery( paste0("select *
+                                   from INFO.",i,""))
+   assign(i,aux)
+ }
